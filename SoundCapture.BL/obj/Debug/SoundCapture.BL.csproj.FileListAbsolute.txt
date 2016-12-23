@@ -1,1 +1,7 @@
 D:\Projects\GitKraken\NicksTuner\SoundCapture.BL\obj\Debug\SoundCapture.BL.csprojResolveAssemblyReference.cache
+D:\Projects\GitKraken\NicksTuner\SoundCapture.BL\bin\Debug\SoundCapture.BL.dll
+D:\Projects\GitKraken\NicksTuner\SoundCapture.BL\bin\Debug\SoundCapture.BL.pdb
+D:\Projects\GitKraken\NicksTuner\SoundCapture.BL\bin\Debug\NAudio.dll
+D:\Projects\GitKraken\NicksTuner\SoundCapture.BL\bin\Debug\NAudio.xml
+D:\Projects\GitKraken\NicksTuner\SoundCapture.BL\obj\Debug\SoundCapture.BL.dll
+D:\Projects\GitKraken\NicksTuner\SoundCapture.BL\obj\Debug\SoundCapture.BL.pdb

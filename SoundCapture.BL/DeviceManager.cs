@@ -3,36 +3,54 @@ using System.Linq;
 using System.Collections.Generic;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
+using DevExpress.XtraEditors;
+using System.Windows.Forms;
 
 namespace SoundCapture.BL
 {
-    public class DeviceManager
+    public static class DeviceManager
     {
-        MMDeviceEnumerator deviceEnum;
-        MMDeviceCollection deviceCol;
+        private static MMDeviceEnumerator deviceEnum;
+        private static MMDeviceCollection deviceCol;
 
-        private void UpdateDevices()
+        private static void UpdateDevices()
         {
-            MMDeviceEnumerator deviceEnum = new MMDeviceEnumerator();
-            MMDeviceCollection deviceCol = deviceEnum.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active);
+            deviceEnum = new MMDeviceEnumerator();
+            deviceCol = deviceEnum.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active);
         }
 
-        public MMDevice[] GetActiveDevices()
+        public static MMDevice[] GetActiveDevices()
         {
             UpdateDevices();
-            return deviceCol.ToArray();
+            try
+            {
+                return deviceCol.ToArray();
+            }
+            catch (ArgumentNullException)
+            {
+                XtraMessageBox.Show("We cannot find any devices at your computer.", "Device error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
         }
 
-        public MMDevice GetDeviceByNumber(Int32 deviceAt)
+        public static MMDevice GetDeviceByNumber(Int32 deviceAt)
         {
             UpdateDevices();
             return deviceCol.ElementAt(deviceAt);
         }
 
-        public MMDevice GetDefaultDevice()
+        public static MMDevice GetDefaultDevice()
         {
             UpdateDevices();
-            return deviceEnum.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Multimedia);
+            try
+            {
+                return deviceEnum.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Multimedia);
+            }
+            catch (NullReferenceException)
+            {
+                XtraMessageBox.Show("We cannot find default device at your computer.", "Device error",  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
         }
     }
 }

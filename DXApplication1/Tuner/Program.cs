@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using DevExpress.UserSkins;
 using DevExpress.Skins;
@@ -10,9 +8,6 @@ namespace Tuner
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
@@ -23,7 +18,10 @@ namespace Tuner
             SkinManager.EnableFormSkins();
             UserLookAndFeel.Default.SetSkinStyle("DevExpress Dark Style");
 
-            Application.Run(new Form1());
+            Tuner mainForm = new Tuner();
+            Presenter presenter = new Presenter(mainForm);
+
+            Application.Run(mainForm);
         }
     }
 }

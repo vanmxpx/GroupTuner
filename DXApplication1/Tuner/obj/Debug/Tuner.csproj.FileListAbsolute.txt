@@ -1,8 +1,14 @@
 D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\bin\Debug\Tuner.exe
 D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\bin\Debug\Tuner.pdb
 D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\obj\Debug\Tuner.csprojResolveAssemblyReference.cache
-D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\obj\Debug\Tuner.Form1.resources
 D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\obj\Debug\Tuner.Properties.Resources.resources
 D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\obj\Debug\Tuner.csproj.GenerateResource.Cache
 D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\obj\Debug\Tuner.exe
 D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\obj\Debug\Tuner.pdb
+D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\obj\Debug\Tuner.Tuner.resources
+D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\bin\Debug\NAudio.dll
+D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\bin\Debug\SoundAlalysis.BL.dll
+D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\bin\Debug\SoundCapture.BL.dll
+D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\bin\Debug\SoundAlalysis.BL.pdb
+D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\bin\Debug\SoundCapture.BL.pdb
+D:\Projects\GitKraken\NicksTuner\DXApplication1\Tuner\bin\Debug\NAudio.xml

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace SoundAlalysis.BL
 {
-    public class Class1
+    public static class FFTMethod
     {
+        public static float[] Transform(float[] prevArray)
+        {
+            return null;
+        }
     }
 }
