@@ -14,12 +14,19 @@ namespace Tuner
         {
             this._form = _form;
             _form.SetDevices(DeviceManager.GetActiveDevices());
+            _form.StartButtonClick += _form_StartButtonClick;
+        }
+
+        private void _form_StartButtonClick(object sender, EventArgs e)
+        {
+            this.Start();
         }
 
 
         protected override void ProcessData(Single[] data)
         {
-            _form.ShowFreq(FrequencyUtil.DetectPitch(data, SampleRate, MinFreq, MaxFreq));
+            //_form.ShowFreq(FrequencyUtil.DetectPitch(data, SampleRate, MinFreq, MaxFreq));
+            _form.ShowFreq(FFTMethod.ProcessThread(data, SampleRate));
         }
     }
 }
