@@ -13,14 +13,15 @@ namespace Tuner
         }
         public void ShowFreq(double freq)
         {
-            if (lblFreq != null)
-                lblFreq.Invoke(new Action(() => lblFreq.Text = freq.ToString()));
+            if (this.InvokeRequired)
+                lblFreq?.Invoke(new Action(() => lblFreq.Text = freq.ToString()));
+            else
+                lblFreq.Text = freq.ToString();
         }
 
         public void SetDevices(MMDevice[] devices)
         {
-            if (devices != null)
-                devicesListBox.DataSource = devices.Select(d => d.FriendlyName).ToList();
+            devicesListBox.DataSource = devices?.Select(d => d.FriendlyName).ToList();
         }
 
         public event EventHandler StartButtonClick;
@@ -31,16 +32,12 @@ namespace Tuner
 
         private void butStart_Click(object sender, EventArgs e)
         {
-            if (StartButtonClick != null)
-            {
-                StartButtonClick.Invoke(this, e);
-            }
+            StartButtonClick?.Invoke(this, e);
         }
 
         private void Tuner_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
         {
-            if (StartButtonClick != null)
-                StartButtonClick.Invoke(this, EventArgs.Empty);
+            StartButtonClick?.Invoke(this, EventArgs.Empty);
         }
     }
 }
