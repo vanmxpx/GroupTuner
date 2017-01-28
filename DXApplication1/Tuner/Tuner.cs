@@ -1,43 +1,95 @@
 ﻿using System;
 using System.Linq;
-using NAudio.CoreAudioApi;
+using Accord.Audio;
+using Accord.DirectSound;
+using System.Numerics;
 
 
 namespace Tuner
 {
-    public partial class Tuner : DevExpress.XtraEditors.XtraForm, ITuner
+    public partial class Tuner : DevExpress.XtraEditors.XtraForm
     {
+        private IAudioSource source;
+
+        Action act;
+             
         public Tuner()
         {
-            InitializeComponent();
+            InitializeComponent();       
         }
+
+        private void butStart_Click(object sender, EventArgs e)
+        {
+            AudioDeviceInfo audioDeviceInfo = this.devicesListBox.SelectedItem as AudioDeviceInfo;
+            if (audioDeviceInfo == null)
+            {
+                throw new ArgumentException("No audio devices available.");
+            }
+            source = new AudioCaptureDevice(audioDeviceInfo)
+            {
+                DesiredFrameSize = 8192,
+                SampleRate = 44100
+            };
+            source.NewFrame += new EventHandler<NewFrameEventArgs>(NewFrame);
+            source.Start();
+        }
+
+        private void butStop_Click(object sender, EventArgs e)
+        {
+            if (source != null)
+            {
+                source.SignalToStop();
+            }
+        }
+
         public void ShowFreq(double freq)
         {
+            act = new Action(() => lblFreq.Text = freq.ToString());
             if (this.InvokeRequired)
-                lblFreq?.Invoke(new Action(() => lblFreq.Text = freq.ToString()));
+            {
+                lblFreq?.Invoke(act);
+            }
             else
                 lblFreq.Text = freq.ToString();
         }
 
-        public void SetDevices(MMDevice[] devices)
+        private void NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            devicesListBox.DataSource = devices?.Select(d => d.FriendlyName).ToList();
+            ComplexSignal complexSignal = ComplexSignal.FromSignal(eventArgs.Signal);
+            complexSignal.ForwardFourierTransform();
+            Complex[] channel = complexSignal.GetChannel(0);//хз почему, но channel 0 дает лучше результат
+            double[] powerSpectrum = Tools.GetPowerSpectrum(channel);
+            double[] frequencyVector = Tools.GetFrequencyVector(complexSignal.Length, complexSignal.SampleRate);
+            powerSpectrum[0] = 0.0;         
+            ShowFreq(frequencyVector[powerSpectrum.GetIndexOfMax()]);
         }
 
-        public event EventHandler StartButtonClick;
-
-        public event EventHandler StopButtonClick;
-
-        public event EventHandler DevicesOpened;
-
-        private void butStart_Click(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
-            StartButtonClick?.Invoke(this, e);
+            base.OnLoad(e);
+            AudioDeviceCollection audioDeviceCollection = new AudioDeviceCollection(AudioDeviceCategory.Capture);
+            foreach (AudioDeviceInfo current in audioDeviceCollection)
+            {
+                devicesListBox.Items.Add(current);
+            }
+            if (devicesListBox.Items.Count == 0)
+            {
+                devicesListBox.Items.Add("No local capture devices");
+                devicesListBox.Enabled = false;
+            }
+            devicesListBox.SelectedIndex = 0;
         }
-
-        private void Tuner_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+    }
+    public static class Extensions
+    {
+        public static int GetIndexOfMax(this double[] arr) 
         {
-            StartButtonClick?.Invoke(this, EventArgs.Empty);
+            double max = arr.Max();
+            for(int i=0;i<arr.Length;i++)
+            {
+                if (max==arr[i]) return i;
+            }
+            return -1;
         }
     }
 }
