@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace SoundAlalysis.BL
 {
@@ -30,7 +31,7 @@ namespace SoundAlalysis.BL
 
             return binSize * maxBinIndex;
         }
-        private static System.Numerics.Complex[] DecimationInFrequency(System.Numerics.Complex[] frame)
+        private static Complex[] DecimationInFrequency(Complex[] frame)
         {
             if (frame.Length == 1) return frame;
             var halfSampleSize = frame.Length >> 1; // frame.Length/2

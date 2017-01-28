@@ -18,7 +18,7 @@ namespace SoundCapture.BL
 
         public Int32 BitsPerSample { get { return 16; } }
         public Int32 ChannelCount { get { return 2; } }
-        public Int32 SampleRate { get { return 96000; } }
+        public Int32 SampleRate { get { return 44100; } }
 
         public AudioCatch()
             : this(DeviceManager.GetDefaultDevice())
@@ -40,16 +40,14 @@ namespace SoundCapture.BL
             _waveIn = new WasapiCapture(_device);
             //_waveIn.DeviceNumber = 0;
             _waveIn.DataAvailable += new EventHandler<WaveInEventArgs>(_waveIn_DataAvailable);
-            _waveIn.WaveFormat = new WaveFormat(SampleRate, BitsPerSample, ChannelCount);
-            
+            _waveIn.WaveFormat = new WaveFormat(SampleRate, BitsPerSample, ChannelCount);            
             _waveIn.StartRecording();
         }
 
         public void Stop()
         {
-            if (_waveIn != null)
-                _waveIn.StopRecording();
-            _waveIn.Dispose();
+            _waveIn?.StopRecording();
+            _waveIn?.Dispose();
             _waveIn = null;
             //_buffer = null;
         }

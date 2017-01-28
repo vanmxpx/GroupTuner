@@ -13,6 +13,7 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            butStop_Click(null, null);
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -32,6 +33,7 @@
             this.butStart = new DevExpress.XtraEditors.SimpleButton();
             this.lblFreq = new System.Windows.Forms.Label();
             this.devicesListBox = new DevExpress.XtraEditors.ListBoxControl();
+            this.butStop = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.devicesListBox)).BeginInit();
@@ -39,6 +41,7 @@
             // 
             // panelControl1
             // 
+            this.panelControl1.Controls.Add(this.butStop);
             this.panelControl1.Controls.Add(this.butStart);
             this.panelControl1.Controls.Add(this.lblFreq);
             this.panelControl1.Controls.Add(this.devicesListBox);
@@ -76,6 +79,15 @@
             this.devicesListBox.Size = new System.Drawing.Size(256, 114);
             this.devicesListBox.TabIndex = 0;
             // 
+            // butStop
+            // 
+            this.butStop.Location = new System.Drawing.Point(501, 54);
+            this.butStop.Name = "butStop";
+            this.butStop.Size = new System.Drawing.Size(75, 23);
+            this.butStop.TabIndex = 3;
+            this.butStop.Text = "Stop";
+            this.butStop.Click += new System.EventHandler(this.butStop_Click);
+            // 
             // Tuner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -84,7 +96,7 @@
             this.Controls.Add(this.panelControl1);
             this.Name = "Tuner";
             this.Text = "Tuner";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Tuner_FormClosing);
+
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
             this.panelControl1.PerformLayout();
@@ -99,7 +111,7 @@
         private DevExpress.XtraEditors.ListBoxControl devicesListBox;
         private System.Windows.Forms.Label lblFreq;
         private DevExpress.XtraEditors.SimpleButton butStart;
-
+        private DevExpress.XtraEditors.SimpleButton butStop;
     }
 }
 
