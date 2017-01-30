@@ -3,6 +3,7 @@ using System.Linq;
 using Accord.Audio;
 using Accord.DirectSound;
 using System.Numerics;
+using SoundAlalysis.BL;
 
 
 namespace Tuner
@@ -10,7 +11,8 @@ namespace Tuner
     public partial class Tuner : DevExpress.XtraEditors.XtraForm
     {
         private IAudioSource source;
-
+        const int MinFreq = 20;
+        const int MaxFreq = 700;
         Action act;
              
         public Tuner()
@@ -28,7 +30,8 @@ namespace Tuner
             source = new AudioCaptureDevice(audioDeviceInfo)
             {
                 DesiredFrameSize = 8192,
-                SampleRate = 44100
+                SampleRate = 96000,
+                Channels = 2,
             };
             source.NewFrame += new EventHandler<NewFrameEventArgs>(NewFrame);
             source.Start();
@@ -37,31 +40,35 @@ namespace Tuner
         private void butStop_Click(object sender, EventArgs e)
         {
             if (source != null)
-            {
                 source.SignalToStop();
-            }
+            source = null;
         }
 
         public void ShowFreq(double freq)
         {
-            act = new Action(() => lblFreq.Text = freq.ToString());
-            if (this.InvokeRequired)
-            {
-                lblFreq?.Invoke(act);
-            }
+            act = new Action(() => lblFreq.Text = freq.ToString("F"));
+            if (lblFreq == null)
+                return;
+            if (lblFreq.InvokeRequired)
+                lblFreq.Invoke(act);
             else
                 lblFreq.Text = freq.ToString();
         }
 
         private void NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            ComplexSignal complexSignal = ComplexSignal.FromSignal(eventArgs.Signal);
-            complexSignal.ForwardFourierTransform();
-            Complex[] channel = complexSignal.GetChannel(0);//хз почему, но channel 0 дает лучше результат
-            double[] powerSpectrum = Tools.GetPowerSpectrum(channel);
-            double[] frequencyVector = Tools.GetFrequencyVector(complexSignal.Length, complexSignal.SampleRate);
-            powerSpectrum[0] = 0.0;         
-            ShowFreq(frequencyVector[powerSpectrum.GetIndexOfMax()]);
+
+                    //FFT
+            var freq = FFTMethod.ProcessThread(eventArgs.Signal.ToFloat(), eventArgs.Signal.SampleRate, MinFreq, MaxFreq);
+            ShowFreq(freq);
+                    //Accord
+            //ComplexSignal complexSignal = ComplexSignal.FromSignal(eventArgs.Signal);
+            //complexSignal.ForwardFourierTransform();
+            //Complex[] channel = complexSignal.GetChannel(0);//хз почему, но channel 0 дает лучше результат
+            //double[] powerSpectrum = Tools.GetPowerSpectrum(channel);
+            //double[] frequencyVector = Tools.GetFrequencyVector(complexSignal.Length, complexSignal.SampleRate);
+            //powerSpectrum[0] = 0.0;         
+            //ShowFreq(frequencyVector[powerSpectrum.GetIndexOfMax()]);
         }
 
         protected override void OnLoad(EventArgs e)

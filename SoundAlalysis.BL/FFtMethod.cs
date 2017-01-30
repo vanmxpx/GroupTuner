@@ -5,48 +5,66 @@ namespace SoundAlalysis.BL
 {
     public static class FFTMethod
     {
-        public static float ProcessThread(float[] frame, float sampleRate)
-        {
+        private static float _sampleRate;
+        private static int _minFreq;
+        private static int _maxFreq;
 
+        public static float ProcessThread(float[] frame, float sampleRate,int minFreq, int maxFreq)
+        {
+            _sampleRate = sampleRate;
+            _maxFreq = minFreq;
+            _maxFreq = maxFreq;
             var complexArray = FrequencyUtil.ConvertToComplex(frame);
 
             var spectrum = DecimationInFrequency(complexArray);
 
-            float binSize = sampleRate / frame.Length;
-            int minBin = (int)(85 / binSize);
-            int maxBin = (int)(300 / binSize);
+
+            return DetectPitch(spectrum);
+        }
+
+        private static float DetectPitch( Complex[] frames)
+        {
+                        //нахождение фундаментальной частоты путем нахождения самой большой амплитуды
+            float binSize = frames.Length / _sampleRate; //период дискретизации (m/r)
+            int minBin = (int)(_minFreq * binSize); //m(номер елемента) = v(частота) * T(период);
+            int maxBin = (int)(_maxFreq * binSize);
             float maxIntensity = 0f;
             int maxBinIndex = 0;
 
             for (int bin = minBin; bin <= maxBin; bin++)
             {
-                double intensity = spectrum[bin].Real * spectrum[bin].Real
-                    + spectrum[bin].Imaginary * spectrum[bin].Imaginary;
+                double intensity = frames[bin].Real * frames[bin].Real
+                    + frames[bin].Imaginary * frames[bin].Imaginary;
                 if (intensity > maxIntensity)
                 {
                     maxIntensity = (float)intensity;
                     maxBinIndex = bin;
                 }
             }
-
-            return binSize * maxBinIndex;
+            return maxBinIndex/binSize;
         }
-        private static Complex[] DecimationInFrequency(Complex[] frame)
+
+        private static Complex[] DecimationInFrequency(Complex[] frame)//прореживание по частоте
+        //(разбиение на две части 0<n<N/2, N/2<n<N)
         {
             if (frame.Length == 1) return frame;
             var halfSampleSize = frame.Length >> 1; // frame.Length/2
             var fullSampleSize = frame.Length;
 
             var arg = -2 * Math.PI / fullSampleSize;
-            var omegaPowBase = new System.Numerics.Complex(Math.Cos(arg), Math.Sin(arg));
+            var omegaPowBase = new System.Numerics.Complex(Math.Cos(arg), Math.Sin(arg));//експонента для комплексного числа
             var omega = System.Numerics.Complex.One;
             var spectrum = new System.Numerics.Complex[fullSampleSize];
 
             for (var j = 0; j < halfSampleSize; j++)
             {
+                //первая половина
+                //
                 spectrum[j] = frame[j] + frame[j + halfSampleSize];
+                //вторая половина
+                //
                 spectrum[j + halfSampleSize] = omega * (frame[j] - frame[j + halfSampleSize]);
-                omega *= omegaPowBase;
+                omega *= omegaPowBase; // степерь k будет накапливаться
             }
 
             var yTop = new System.Numerics.Complex[halfSampleSize];

@@ -7,8 +7,8 @@ namespace Tuner
     public class Presenter : AudioCatch
     {
         private ITuner _form;
-        const Double MinFreq = 60;
-        const Double MaxFreq = 1300;
+        const int MinFreq = 60;
+        const int MaxFreq = 500;
 
         public Presenter(ITuner _form)
         {
@@ -28,7 +28,7 @@ namespace Tuner
         protected override void ProcessData(Single[] data)
         {
             //_form.ShowFreq(FrequencyUtil.DetectPitch(data, SampleRate, MinFreq, MaxFreq));
-            _form.ShowFreq(FFTMethod.ProcessThread(data, SampleRate));
+            _form.ShowFreq(FFTMethod.ProcessThread(data, SampleRate, MinFreq, MaxFreq));
         }
     }
 }
