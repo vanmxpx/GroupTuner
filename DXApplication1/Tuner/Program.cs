@@ -19,7 +19,7 @@ namespace Tuner
             UserLookAndFeel.Default.SetSkinStyle("DevExpress Dark Style");
 
             Tuner mainForm = new Tuner();
-            Presenter presenter = new Presenter(mainForm);
+            //Presenter presenter = new Presenter(mainForm);
 
             Application.Run(mainForm);
         }

@@ -1,5 +1,0 @@
-D:\Projects\GitKraken\NicksTuner\SoundAlalysis.BL\bin\Debug\SoundAlalysis.BL.dll
-D:\Projects\GitKraken\NicksTuner\SoundAlalysis.BL\bin\Debug\SoundAlalysis.BL.pdb
-D:\Projects\GitKraken\NicksTuner\SoundAlalysis.BL\obj\Debug\SoundAlalysis.BL.csprojResolveAssemblyReference.cache
-D:\Projects\GitKraken\NicksTuner\SoundAlalysis.BL\obj\Debug\SoundAlalysis.BL.dll
-D:\Projects\GitKraken\NicksTuner\SoundAlalysis.BL\obj\Debug\SoundAlalysis.BL.pdb
